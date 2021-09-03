@@ -1,0 +1,27 @@
+# Certificate Authority CA key
+openssl genrsa -des3 -out ca.key 4096
+# Enter pass phase for ca.key: 12345678
+
+# Generate CA cert
+openssl req -x509 -new -nodes -key ca.key -subj "/C=HK/ST=HongKong/L=Causeway Bay/O=Wah Jong/CN=Wah Jong CA" -sha256 -days 3650 -out ca.crt
+
+Installing Root Certificate on Windows
+1. Windows+R certmgr.msc
+Action > Import > Trusted Root Certification Authorities
+
+# Generate CA-Signed Certificates for Your Dev Sites
+openssl genrsa -out 10.0.1.201.key/ 4096
+openssl req -new -key 10.0.1.201.key/ -subj "/C=HK/ST=HongKong/L=Causeway Bay/O=MyO/OU=MyOU/CN=Local development" -sha256 -out server.csr -config server.cnf -extensions v3_req
+
+# Verify CSR has X509v3 Subject Alternative Name:
+openssl req -noout -text -in 10.0.1.201.csr
+
+# CA sign CSR
+openssl x509 -req -extfile server.cnf -extensions v3_req -days 365 -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out 10.0.1.201.crt
+
+# Verify the certificate has an IP SAN
+# X509v3 Subject Alternative Name: server
+openssl x509 -in 10.0.1.201.crt -noout -text
+
+# Verify that a Certificate is issued by a CA
+openssl verify -verbose -CAfile ca.crt 10.0.1.201.crt

@@ -1,0 +1,7 @@
+.github/
+html/css/
+html/dist/
+node_modules/
+npm-debug.log
+package-lock.json
+visualizer.html

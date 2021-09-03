@@ -1,0 +1,92 @@
+; create the bare (central) repository:
+; \\WADE\svelte-snowpack-typescript.git
+> cd D:\git\svelte-snowpack-typescript.git
+> git --bare init --shared
+
+; <repo1> svelte-snowpack-typescript (branch: master)
+> cd D:\git\svelte-snowpack-typescript
+> git init
+> edit .gitignore
+.github/
+build/
+dist/
+node_modules/
+npm-debug.log
+package-lock.json
+> git add .
+> git commit
+
+; <repo1> fix/change upstream
+> git remote add origin \\WADE\svelte-snowpack-typescript.git
+> git branch -a
+; push your commit to the central repository:
+> git branch --set-upstream-to=origin/master
+> git push --set-upstream origin master
+> git push
+
+; show remote status
+> git remote show origin
+
+; <repo2> clone the shared repo to local working repository:
+> cd X:\git\
+> git clone \\WADE\svelte-snowpack-typescript.git
+
+; upload new file
+> git commit
+> git push origin master
+
+; check in with the upstream remote
+> git fetch
+> git status
+
+; show remote status
+> git remote show origin
+
+> git remote -v
+> git remote remove origin
+
+> git rm -r --cached .
+> git add .
+> git commit -m "remove .gitignore files"
+> git push
+
+# .gitignore is working, remove tracked files from index
+> git rm -r --cached node_modules/
+> git add .
+> git commit -m 'Removing ignored files'
+
+
+How to remove node_modules
+https://gist.github.com/lmcneel/45594e550a3403d589bdcaad38138a83
+
+1. Remove the node_modules folder from the git repository
+> git rm -r --cached node_modules
+
+2. Commit the git repository without the node modules folder
+> git commit -m "Removed node_module folder"
+
+
+
+⚠ Important: If you have any local changes, they will be lost
+1. run a fetch to update all origin/<branch>
+git fetch --all
+
+2. Backup your current branch
+git checkout -b backup-master
+
+3. resets the master branch to what you just fetched. The --hard option changes all the files in your working tree to match the files in origin/master
+git reset --hard origin/master
+git reset --hard origin/<branch_name>
+
+
+⚠ remove all commit history
+rmdir .git /q /s
+git init
+git remote add origin \\WADE\svelte-snowpack-typescript.git
+git add --all
+git commit -am "Initial commit"
+git push -f origin master
+
+
+git clear commits
+git reset --hard origin
